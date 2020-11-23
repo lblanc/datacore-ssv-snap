@@ -8,9 +8,9 @@ import (
 	"encoding/json"
 	"flag"
 	"os"
-	"time"
-	"strconv"
-	"strings"
+	//"time"
+	//"strconv"
+	//"strings"
 	//"reflect"
 )
 
@@ -53,7 +53,8 @@ func main() {
 	
 	//req_hosts := restRequest(*dcsserver , *restserver , *user , *passwd , "hosts")
 	//req_servers := restRequest(*dcsserver , *restserver , *user , *passwd , "servers")
-	req_servergroups := restRequest(*dcsserver , *restserver , *user , *passwd , "servergroups")
+	//req_servergroups := restRequest(*dcsserver , *restserver , *user , *passwd , "servergroups")
+	req_snapshots := restRequest(*dcsserver , *restserver , *user , *passwd , "snapshots")
 	//fmt.Println(reflect.TypeOf(*req))
 
 	client := &http.Client{
@@ -96,39 +97,31 @@ func main() {
 
 
 	//get servergroups
-	resp_servergroups, err := client.Do(&req_servergroups)
+	resp_snapshots, err := client.Do(&req_snapshots)
 	if err != nil {
 		fmt.Printf("The HTTP request failed with error %s\n", err)
 		os.Exit(0)
-	} else if resp_servergroups.Status != "200 OK"{
-		fmt.Printf("The HTTP request failed with error %s\n", resp_servergroups.Status)
+	} else if resp_snapshots.Status != "200 OK"{
+		fmt.Printf("The HTTP request failed with error %s\n", resp_snapshots.Status)
 		os.Exit(0)
 	}
 	
-	data, _ := ioutil.ReadAll(resp_servergroups.Body)
-	var servergroups []servergroup
-	json.Unmarshal([]byte(data), &servergroups) 
+	data, _ := ioutil.ReadAll(resp_snapshots.Body)
+	var snapshots []snapshot
+	json.Unmarshal([]byte(data), &snapshots) 
 
 
 	//print out
-
-	for _, item := range servergroups{
-		fmt.Printf("\n%s (Local group: %v)\n",item.Caption,item.OurGroup)
-		for _, item2 := range item.ExistingProductKeys{
-			s := strings.TrimPrefix(item2.ExpirationDate, "/Date(")
-			s = s[:len(s)-7]
-			i, err := strconv.ParseInt(s, 10, 64)
-			if err != nil {
+	if len(snapshots) == 0  {
+		fmt.Println("Where are no snapshots !")	
+	} else {
+		fmt.Println("Where are snapshots !")
+		fmt.Println("Here the list:")
+		for _, item := range snapshots{
+			fmt.Println(item.Caption)	
 			}
-			fmt.Println(item2.ProductName)
-			fmt.Println(item2.LastFive)
-			fmt.Println(time.Unix(i/1000, 0))
-			
-			
-		}
-
 	}
-
+	
 
 	/*
 	for _, item := range hosts{

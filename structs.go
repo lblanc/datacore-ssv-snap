@@ -402,3 +402,18 @@ type servergroup struct {
 	ExtendedCaption  string `json:"ExtendedCaption,omitempty"`
 	Internal  bool `json:"Internal,omitempty"`
 }
+
+type snapshot struct {
+	SourceLogicalDiskId string `json:"SourceLogicalDiskId,omitempty"`
+    DestinationLogicalDiskId string `json:"DestinationLogicalDiskId,omitempty"`
+    Type float64 `json:"Type,omitempty"`
+    TimeStamp string `json:"TimeStamp,omitempty"`
+    ActiveOperation float64 `json:"ActiveOperation,omitempty"`
+    State float64 `json:"State,omitempty"`
+    Failure float64 `json:"Failure,omitempty"`
+    SequenceNumber float64 `json:"SequenceNumber,omitempty"`
+    Id string `json:"Id,omitempty"`
+    Caption string `json:"Caption,omitempty"`
+    ExtendedCaption string `json:"ExtendedCaption,omitempty"`
+    Internal bool `json:"Internal,omitempty"`
+}
